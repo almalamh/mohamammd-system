@@ -9,13 +9,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background-color: #f4f6f9; color: #333; padding: 20px; min-height: 100vh; }
         
-        /* الهيدر العلوي */
         .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 25px; border-radius: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .header h1 { font-size: 24px; }
         .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none; transition: 0.3s; font-size: 14px; }
         .logout-btn:hover { background: #c0392b; }
 
-        /* كروت الإحصائيات */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 5px solid #2a5298; }
         .stat-card.expense { border-right-color: #e67e22; }
@@ -23,7 +21,6 @@
         .stat-title { font-size: 14px; color: #7f8c8d; margin-bottom: 5px; }
         .stat-value { font-size: 22px; font-weight: bold; color: #2c3e50; }
 
-        /* قسم النماذج (الإدخال) */
         .forms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
         .form-box h3 { color: #2a5298; margin-bottom: 15px; font-size: 16px; border-bottom: 2px solid #edf2f7; padding-bottom: 8px; }
@@ -33,7 +30,6 @@
         .submit-btn { width: 100%; padding: 10px; background: #2a5298; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background: #1e3c72; }
 
-        /* الجداول */
         .section-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 25px; }
         .section-title { font-size: 18px; color: #2a5298; margin-bottom: 15px; font-weight: bold; }
         .table-responsive { overflow-x: auto; }
@@ -45,6 +41,7 @@
         .badge.success { background-color: #def7ec; color: #03543f; }
         .badge.warning { background-color: #fef3c7; color: #92400e; }
         .badge.danger { background-color: #fde8e8; color: #9b1c1c; }
+        .delete-btn { background: #e74c3c; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -52,7 +49,7 @@
     <div class="header">
         <div>
             <h1>نظام إدارة العهد والمشتريات والطباعة</h1>
-            <p>مرحباً بك يا محمد | لوحة إدارة العمليات الحية</p>
+            <p>مرحباً بك يا محمد | لوحة البيانات المحفوظة والآمنة</p>
         </div>
         <a href="./index.html" class="logout-btn">تسجيل الخروج</a>
     </div>
@@ -65,21 +62,20 @@
         </div>
         <div class="stat-card expense">
             <div class="stat-title">إجمالي المصروفات الحالية</div>
-            <div id="totalExpensesCard" class="stat-value">12,450 ر.س</div>
+            <div id="totalExpensesCard" class="stat-value">0 ر.س</div>
         </div>
         <div class="stat-card materials">
             <div class="stat-title">عدد المواد الخام المسجلة</div>
-            <div id="totalMaterialsCard" class="stat-value">4 مواد</div>
+            <div id="totalMaterialsCard" class="stat-value">0 مواد</div>
         </div>
         <div class="stat-card" style="border-right-color: #9b59b6;">
             <div class="stat-title">المتبقي في العهدة</div>
-            <div id="remainingBudgetCard" class="stat-value">37,550 ر.س</div>
+            <div id="remainingBudgetCard" class="stat-value">50,000 ر.س</div>
         </div>
     </div>
 
     <!-- قسم نماذج الإدخال -->
     <div class="forms-grid">
-        <!-- نموذج إضافة مادة خام -->
         <div class="form-box">
             <h3>📥 إضافة مادة خام جديدة للمستودع</h3>
             <form onsubmit="addMaterial(event)">
@@ -99,7 +95,6 @@
             </form>
         </div>
 
-        <!-- نموذج تسجيل مصروف جديد -->
         <div class="form-box">
             <h3>💸 تسجيل فاتورة / مصروف جديد من العهدة</h3>
             <form onsubmit="addExpense(event)">
@@ -137,14 +132,10 @@
                         <th>الكمية المتوفرة</th>
                         <th>وحدة القياس</th>
                         <th>حالة المخزون</th>
+                        <th>إجراء</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr><td>MAT-01</td><td>ورق طباعة فاخر A4</td><td>150</td><td>كرتون</td><td><span class="badge success">متوفر بكثرة</span></td></tr>
-                    <tr><td>MAT-02</td><td>حبر طابعة أسود ليزر</td><td>25</td><td>علبة</td><td><span class="badge success">متوفر</span></td></tr>
-                    <tr><td>MAT-03</td><td>بلاستيك تغليف حراري</td><td>5</td><td>رول</td><td><span class="badge warning">مخزون منخفض</span></td></tr>
-                    <tr><td>MAT-04</td><td>كرتون تجمع وتغليف سميك</td><td>0</td><td>حبة</td><td><span class="badge danger">نفذت الكمية</span></td></tr>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -160,67 +151,121 @@
                         <th>البيان / الوصف</th>
                         <th>المبلغ شامل الضريبة</th>
                         <th>الشخص المسؤول</th>
+                        <th>إجراء</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr><td>EX-1001</td><td>2026-07-01</td><td>شراء أحبار طابعة إضافية ومستلزمات صيانة</td><td>3,200 ر.س</td><td>محمد إبراهيم</td></tr>
-                    <tr><td>EX-1002</td><td>2026-07-03</td><td>صيانة آلة التغليف الحراري الرئيسية</td><td>850 ر.س</td><td>زيد نبيل</td></tr>
-                    <tr><td>EX-1003</td><td>2026-07-05</td><td>تأمين كمية ورق كوشيه للطباعة الرقمية</td><td>6,400 ر.س</td><td>أكرم محمد</td></tr>
-                    <tr><td>EX-1004</td><td>2026-07-08</td><td>مصاريف نقل وشحن بضائع ومواد مستوردة</td><td>2,000 ر.س</td><td>أمجد</td></tr>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // متغيرات الحسابات الحية
-        let currentExpenses = 12450;
-        let totalBudget = 50000;
-        let materialCount = 4;
-        let expenseCount = 1004;
+        const totalBudget = 50000;
 
-        // دالة إضافة مادة
+        // مصفوفات البيانات الافتراضية إذا كانت الذاكرة فارغة
+        let defaultMaterials = [
+            { id: "MAT-01", name: "ورق طباعة فاخر A4", qty: 150, unit: "كرتون" },
+            { id: "MAT-02", name: "حبر طابعة أسود ليزر", qty: 25, unit: "علبة" },
+            { id: "MAT-03", name: "بلاستيك تغليف حراري", qty: 5, unit: "رول" },
+            { id: "MAT-04", name: "كرتون تجمع وتغليف سميك", qty: 0, unit: "حبة" }
+        ];
+
+        let defaultExpenses = [
+            { id: "EX-1001", date: "2026-07-01", desc: "شراء أحبار طابعة إضافية ومستلزمات صيانة", amount: 3200, user: "محمد إبراهيم" },
+            { id: "EX-1002", date: "2026-07-03", desc: "صيانة آلة التغليف الحراري الرئيسية", amount: 850, user: "زيد نبيل" },
+            { id: "EX-1003", date: "2026-07-05", desc: "تأمين كمية ورق كوشيه للطباعة الرقمية", amount: 6400, user: "أكرم محمد" },
+            { id: "EX-1004", date: "2026-07-08", desc: "مصاريف نقل وشحن بضائع ومواد مستوردة", amount: 2000, user: "أمجد" }
+        ];
+
+        // تحميل البيانات من الذاكرة المحلية أو وضع الافتراضية
+        let materials = JSON.parse(localStorage.getItem('materials')) || defaultMaterials;
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || defaultExpenses;
+
+        // عند تحميل الصفحة نقوم بعرض كل شيء وتحديث الحسابات
+        window.onload = function() {
+            renderAll();
+        };
+
+        function renderAll() {
+            renderMaterials();
+            renderExpenses();
+            calculateStats();
+        }
+
+        function calculateStats() {
+            let totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
+            let remaining = totalBudget - totalExpenses;
+
+            document.getElementById('totalMaterialsCard').innerText = materials.length + " مواد";
+            document.getElementById('totalExpensesCard').innerText = totalExpenses.toLocaleString() + " ر.س";
+            document.getElementById('remainingBudgetCard').innerText = remaining.toLocaleString() + " ر.س";
+        }
+
+        function renderMaterials() {
+            const tbody = document.getElementById('materialsTable').getElementsByTagName('tbody')[0];
+            tbody.innerHTML = "";
+            materials.forEach((mat, index) => {
+                let badge = '<span class="badge success">متوفر بكثرة</span>';
+                if(mat.qty == 0) badge = '<span class="badge danger">نفذت الكمية</span>';
+                else if(mat.qty < 10) badge = '<span class="badge warning">مخزون منخفض</span>';
+
+                let row = tbody.insertRow();
+                row.innerHTML = `<td>${mat.id}</td><td>${mat.name}</td><td>${mat.qty}</td><td>${mat.unit}</td><td>${badge}</td><td><button class="delete-btn" onclick="deleteMaterial(${index})">حذف</button></td>`;
+            });
+            localStorage.setItem('materials', JSON.stringify(materials));
+        }
+
+        function renderExpenses() {
+            const tbody = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
+            tbody.innerHTML = "";
+            expenses.forEach((exp, index) => {
+                let row = tbody.insertRow();
+                row.innerHTML = `<td>${exp.id}</td><td>${exp.date}</td><td>${exp.desc}</td><td>${exp.amount.toLocaleString()} ر.س</td><td>${exp.user}</td><td><button class="delete-btn" onclick="deleteExpense(${index})">حذف</button></td>`;
+            });
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+        }
+
         function addMaterial(e) {
             e.preventDefault();
-            materialCount++;
-            
             const name = document.getElementById('matName').value;
             const qty = parseInt(document.getElementById('matQty').value);
             const unit = document.getElementById('matUnit').value;
-            
-            let badge = '<span class="badge success">متوفر بكثرة</span>';
-            if(qty == 0) badge = '<span class="badge danger">نفذت الكمية</span>';
-            else if(qty < 10) badge = '<span class="badge warning">مخزون منخفض</span>';
+            const nextId = "MAT-0" + (materials.length + 1);
 
-            const table = document.getElementById('materialsTable').getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
-            newRow.innerHTML = `<td>MAT-0${materialCount}</td><td>${name}</td><td>${qty}</td><td>${unit}</td><td>${badge}</td>`;
-            
-            document.getElementById('totalMaterialsCard').innerText = materialCount + " مواد";
+            materials.push({ id: nextId, name: name, qty: qty, unit: unit });
+            renderMaterials();
+            calculateStats();
             e.target.reset();
         }
 
-        // دالة إضافة مصروف
         function addExpense(e) {
             e.preventDefault();
-            expenseCount++;
-            
             const desc = document.getElementById('expDesc').value;
             const amount = parseFloat(document.getElementById('expAmount').value);
             const user = document.getElementById('expUser').value;
             const date = new Date().toISOString().split('T')[0];
+            const nextId = "EX-" + (1001 + expenses.length);
 
-            const table = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
-            newRow.innerHTML = `<td>EX-${expenseCount}</td><td>${date}</td><td>${desc}</td><td>${amount.toLocaleString()} ر.س</td><td>${user}</td>`;
-            
-            // تحديث الحسابات والكروت
-            currentExpenses += amount;
-            let remaining = totalBudget - currentExpenses;
-            
-            document.getElementById('totalExpensesCard').innerText = currentExpenses.toLocaleString() + " ر.س";
-            document.getElementById('remainingBudgetCard').innerText = remaining.toLocaleString() + " ر.س";
+            expenses.push({ id: nextId, date: date, desc: desc, amount: amount, user: user });
+            renderExpenses();
+            calculateStats();
             e.target.reset();
+        }
+
+        function deleteMaterial(index) {
+            if(confirm("هل أنت متأكد من حذف هذه المادة؟")) {
+                materials.splice(index, 1);
+                renderMaterials();
+                calculateStats();
+            }
+        }
+
+        function deleteExpense(index) {
+            if(confirm("هل أنت متأكد من حذف هذا المصروف؟")) {
+                expenses.splice(index, 1);
+                renderExpenses();
+                calculateStats();
+            }
         }
     </script>
 </body>

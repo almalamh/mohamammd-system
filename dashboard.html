@@ -3,28 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - نظام إدارة العهد</title>
+    <title>تسجيل الدخول - نظام العهد</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: #f4f6f9; color: #333; padding: 20px; }
-        .header { background: #2a5298; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { margin-bottom: 10px; }
-        .welcome-msg { font-size: 18px; color: #666; margin-bottom: 20px; }
+        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-container { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 450px; text-align: center; }
+        .logo-title { color: #2a5298; font-size: 28px; font-weight: bold; margin-bottom: 5px; }
+        .sub-title { color: #888; font-size: 16px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: bold; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; outline: none; font-size: 16px; transition: 0.3s; }
+        .form-group input:focus { border-color: #2a5298; }
+        .login-btn { width: 100%; padding: 12px; background: #2a5298; border: none; border-radius: 10px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .login-btn:hover { background: #1e3c72; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>نظام إدارة العهد والمشتريات</h1>
-        <p>مرحباً بك في لوحة التحكم الرئيسية</p>
+    <div class="login-container">
+        <div class="logo-title">محمد إبراهيم</div>
+        <div class="sub-title">بوابة الاسترداد</div>
+        <h2 style="margin-bottom: 20px; color: #333;">تسجيل الدخول</h2>
+        
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>اسم المستخدم</label>
+                <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+            </div>
+            <button type="submit" class="login-btn">دخول</button>
+        </form>
     </div>
 
-    <div class="container">
-        <div class="welcome-msg">تم تسجيل دخولك بنجاح إلى النظام اليدوي للعهد.</div>
-        <p>هنا ستظهر جداول العهد، والمواد الخام، والمصاريف لاحقاً بناءً على التصميم الخاص بك.</p>
-    </div>
+    <script>
+        const usersDatabase = [
+            { username: "MM777", password: "2500588591", name: "محمد" },
+            { username: "zaid.nabil", password: "123456", name: "زيد نبيل" },
+            { username: "akram.mohammed", password: "123456", name: "أكرم محمد" },
+            { username: "amjad", password: "123456", name: "أمجد" }
+        ];
 
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value;
+            
+            const user = usersDatabase.find(u => u.username === usernameInput && u.password === passwordInput);
+            
+            if (user) {
+                alert("أهلاً بك يا " + user.name + "، تم تسجيل الدخول بنجاح!");
+                // الانتقال إلى الصفحة المنفصلة
+                window.location.href = "dashboard.html"; 
+            } else {
+                alert("عذراً، اسم المستخدم أو كلمة المرور غير صحيحة!");
+            }
+        }
+    </script>
 </body>
 </html>

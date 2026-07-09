@@ -3,28 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - نظام إدارة العهد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>لوحة التحكم - نظام إدارة العهد والمواد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .dashboard-container { background: #f4f6f9; color: #333; width: 100%; max-width: 900px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        .header { background: #2a5298; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
-        .content-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .welcome-msg { font-size: 18px; color: #666; margin-bottom: 20px; }
+        body { background-color: #f4f6f9; color: #333; padding: 20px; min-height: 100vh; }
+        
+        /* الهيدر العلوي */
+        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 25px; border-radius: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header h1 { font-size: 24px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none; transition: 0.3s; font-size: 14px; }
+        .logout-btn:hover { background: #c0392b; }
+
+        /* كروت الإحصائيات السريعة */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 5px solid #2a5298; display: flex; flex-direction: column; justify-content: center; }
+        .stat-card.expense { border-right-color: #e67e22; }
+        .stat-card.materials { border-right-color: #2ecc71; }
+        .stat-title { font-size: 14px; color: #7f8c8d; margin-bottom: 5px; }
+        .stat-value { font-size: 22px; font-weight: bold; color: #2c3e50; }
+
+        /* الحاوية الرئيسية للجداول */
+        .main-content { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .section-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .section-title { font-size: 18px; color: #2a5298; margin-bottom: 15px; font-weight: bold; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* تصميم الجداول الاحترافي */
+        .table-responsive { overflow-x: auto; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; text-align: right; min-width: 600px; }
+        th { background-color: #f8f9fa; color: #34495e; padding: 12px 15px; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 12px 15px; border-bottom: 1px solid #edf2f7; font-size: 15px; color: #4a5568; }
+        tr:hover { background-color: #f8fafc; }
+        
+        /* شارات الحالة للبضائع والمواد */
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        .badge.success { background-color: #def7ec; color: #03543f; }
+        .badge.warning { background-color: #fef3c7; color: #92400e; }
+        .badge.danger { background-color: #fde8e8; color: #9b1c1c; }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <div class="header">
-            <h1>نظام إدارة العهد والمشتريات</h1>
-            <p>مرحباً بك في لوحة التحكم الرئيسية</p>
+    <!-- الهيدر العلوي -->
+    <div class="header">
+        <div>
+            <h1>نظام إدارة العهد والمشتريات والطباعة</h1>
+            <p>مرحباً بك يا محمد | لوحة التحكم والإدارة اليدوية</p>
         </div>
-        <div class="content-box">
-            <div class="welcome-msg">🎉 أهلاً بك يا محمد، تم تسجيل دخولك بنجاح إلى النظام اليدوي للعهد.</div>
-            <p>هنا ستظهر جداول العهد، والمواد الخام، والمصاريف لاحقاً بناءً على التصميم الخاص بك.</p>
+        <a href="./index.html" class="logout-btn">تسجيل الخروج</a>
+    </div>
+
+    <!-- كروت ملخص العهد والمصاريف -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-title">إجمالي العهدة المستلمة</div>
+            <div class="stat-value">50,000 ر.س</div>
         </div>
+        <div class="stat-card expense">
+            <div class="stat-title">إجمالي المصروفات الحالية</div>
+            <div class="stat-value">12,450 ر.س</div>
+        </div>
+        <div class="stat-card materials">
+            <div class="stat-title">عدد المواد الخام المسجلة</div>
+            <div class="stat-value">8 مواد</div>
+        </div>
+        <div class="stat-card" style="border-right-color: #9b59b6;">
+            <div class="stat-title">المتبقي في العهدة</div>
+            <div class="stat-value">37,550 ر.س</div>
+        </div>
+    </div>
+
+    <!-- المحتوى والجداول الرئيسي -->
+    <div class="main-content">
+        
+        <!-- جدول المواد الخام والمستودع -->
+        <div class="section-box">
+            <div class="section-title">
+                <span>📦 جدول المواد الخام والمخزون</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>كود المادة</th>
+                            <th>اسم المادة الخام</th>
+                            <th>الكمية المتوفرة</th>
+                            <th>وحدة القياس</th>
+                            <th>حالة المخزون</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MAT-01</td>
+                            <td>ورق طباعة فاخر A4</td>
+                            <td>150</td>
+                            <td>كرتون</td>
+                            <td><span class="badge success">متوفر بكثرة</span></td>
+                        </tr>
+                        <tr>
+                            <td>MAT-02</td>
+                            <td>حبر طابعة أسود ليزر</td>
+                            <td>25</td>
+                            <td>علبة</td>
+                            <td><span class="badge success">متوفر</span></td>
+                        </tr>
+                        <tr>
+                            <td>MAT-03</td>
+                            <td>بلاستيك تغليف حراري</td>
+                            <td>5</td>
+                            <td>رول</td>
+                            <td><span class="badge warning">مخزون منخفض</span></td>
+                        </tr>
+                        <tr>
+                            <td>MAT-04</td>
+                            <td>كرتون تجميع وتغليف سميك</td>
+                            <td>0</td>
+                            <td>حبة</td>
+                            <td><span class="badge danger">نفذت الكمية</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- جدول المصروفات والعهد اليدوية -->
+        <div class="section-box">
+            <div class="section-title">
+                <span>💸 سجل المشتريات والمصروفات المستندية</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم السند</th>
+                            <th>التاريخ</th>
+                            <th>البيان / الوصف</th>
+                            <th>المبلغ شامل الضريبة</th>
+                            <th>الشخص المسؤول</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>EX-1001</td>
+                            <td>2026-07-01</td>
+                            <td>شراء أحبار طابعة إضافية ومستلزمات صيانة</td>
+                            <td>3,200 ر.س</td>
+                            <td>محمد إبراهيم</td>
+                        </tr>
+                        <tr>
+                            <td>EX-1002</td>
+                            <td>2026-07-03</td>
+                            <td>صيانة آلة التغليف الحراري الرئيسية</td>
+                            <td>850 ر.س</td>
+                            <td>زيد نبيل</td>
+                        </tr>
+                        <tr>
+                            <td>EX-1003</td>
+                            <td>2026-07-05</td>
+                            <td>تأمين كمية ورق كوشيه للطباعة الرقمية</td>
+                            <td>6,400 ر.س</td>
+                            <td>أكرم محمد</td>
+                        </tr>
+                        <tr>
+                            <td>EX-1004</td>
+                            <td>2026-07-08</td>
+                            <td>مصاريف نقل وشحن بضائع ومواد مستوردة</td>
+                            <td>2,000 ر.س</td>
+                            <td>أمجد</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
 </body>

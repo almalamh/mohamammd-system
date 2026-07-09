@@ -49,16 +49,15 @@
     <div class="header">
         <div>
             <h1>نظام إدارة العهد والمشتريات والطباعة</h1>
-            <p>مرحباً بك يا محمد | لوحة البيانات المحفوظة والآمنة</p>
+            <p>مرحباً بك يا محمد | لوحة البيانات الحقيقية</p>
         </div>
         <a href="./index.html" class="logout-btn">تسجيل الخروج</a>
     </div>
 
-    <!-- كروت المبالغ الإحصائية -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-title">إجمالي العهدة المستلمة</div>
-            <div class="stat-value">50,000 ر.س</div>
+            <div id="totalBudgetCard" class="stat-value">50,000 ر.س</div>
         </div>
         <div class="stat-card expense">
             <div class="stat-title">إجمالي المصروفات الحالية</div>
@@ -74,7 +73,6 @@
         </div>
     </div>
 
-    <!-- قسم نماذج الإدخال -->
     <div class="forms-grid">
         <div class="form-box">
             <h3>📥 إضافة مادة خام جديدة للمستودع</h3>
@@ -120,7 +118,6 @@
         </div>
     </div>
 
-    <!-- الجداول -->
     <div class="section-box">
         <div class="section-title">📦 جدول المواد الخام والمخزون</div>
         <div class="table-responsive">
@@ -160,29 +157,14 @@
     </div>
 
     <script>
+        // حدد مبلغ عهدتك الحقيقي هنا (مثال: 50000)
         const totalBudget = 50000;
 
-        // مصفوفات البيانات الافتراضية إذا كانت الذاكرة فارغة
-        let defaultMaterials = [
-            { id: "MAT-01", name: "ورق طباعة فاخر A4", qty: 150, unit: "كرتون" },
-            { id: "MAT-02", name: "حبر طابعة أسود ليزر", qty: 25, unit: "علبة" },
-            { id: "MAT-03", name: "بلاستيك تغليف حراري", qty: 5, unit: "رول" },
-            { id: "MAT-04", name: "كرتون تجمع وتغليف سميك", qty: 0, unit: "حبة" }
-        ];
+        let materials = JSON.parse(localStorage.getItem('materials')) || [];
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
-        let defaultExpenses = [
-            { id: "EX-1001", date: "2026-07-01", desc: "شراء أحبار طابعة إضافية ومستلزمات صيانة", amount: 3200, user: "محمد إبراهيم" },
-            { id: "EX-1002", date: "2026-07-03", desc: "صيانة آلة التغليف الحراري الرئيسية", amount: 850, user: "زيد نبيل" },
-            { id: "EX-1003", date: "2026-07-05", desc: "تأمين كمية ورق كوشيه للطباعة الرقمية", amount: 6400, user: "أكرم محمد" },
-            { id: "EX-1004", date: "2026-07-08", desc: "مصاريف نقل وشحن بضائع ومواد مستوردة", amount: 2000, user: "أمجد" }
-        ];
-
-        // تحميل البيانات من الذاكرة المحلية أو وضع الافتراضية
-        let materials = JSON.parse(localStorage.getItem('materials')) || defaultMaterials;
-        let expenses = JSON.parse(localStorage.getItem('expenses')) || defaultExpenses;
-
-        // عند تحميل الصفحة نقوم بعرض كل شيء وتحديث الحسابات
         window.onload = function() {
+            document.getElementById('totalBudgetCard').innerText = totalBudget.toLocaleString() + " ر.س";
             renderAll();
         };
 

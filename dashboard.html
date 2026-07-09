@@ -14,7 +14,6 @@
         .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none; transition: 0.3s; font-size: 14px; }
         .logout-btn:hover { background: #c0392b; }
 
-        /* قسم تحديث العهدة يدوياً */
         .budget-setter { background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 15px; }
         .budget-setter label { font-weight: bold; color: #2a5298; font-size: 15px; }
         .budget-setter input { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; width: 200px; }
@@ -64,7 +63,7 @@
     <!-- بار إدخال العهدة يدوياً -->
     <div class="budget-setter">
         <label>💰 إدخال / تحديث قيمة العهدة الحالية:</label>
-        <input type="number" id="customBudgetInput" placeholder="أدخل مبلغ العهدة هنا">
+        <input type="number" id="customBudgetInput" placeholder="أدخل مبلغ العهدة بالرقم هنا">
         <button onclick="updateBudget()">تحديث العهدة</button>
     </div>
 
@@ -174,10 +173,10 @@
     </div>
 
     <script>
-        // تحميل العهدة والبيانات من الذاكرة المحلية
-        let totalBudget = parseFloat(localStorage.getItem('totalBudget')) || 0;
-        let materials = JSON.parse(localStorage.getItem('materials')) || [];
-        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        // استخدام مفاتيح جديدة v2 لتصفير الذاكرة القديمة تماماً
+        let totalBudget = parseFloat(localStorage.getItem('totalBudget_v2')) || 0;
+        let materials = JSON.parse(localStorage.getItem('materials_v2')) || [];
+        let expenses = JSON.parse(localStorage.getItem('expenses_v2')) || [];
 
         window.onload = function() {
             if(totalBudget > 0) {
@@ -186,7 +185,6 @@
             renderAll();
         };
 
-        // دالة تحديث العهدة يدوياً
         function updateBudget() {
             const inputVal = parseFloat(document.getElementById('customBudgetInput').value);
             if (isNaN(inputVal) || inputVal < 0) {
@@ -194,7 +192,7 @@
                 return;
             }
             totalBudget = inputVal;
-            localStorage.setItem('totalBudget', totalBudget);
+            localStorage.setItem('totalBudget_v2', totalBudget);
             calculateStats();
             alert("تم تحديث مبلغ العهدة بنجاح!");
         }
@@ -226,7 +224,7 @@
                 let row = tbody.insertRow();
                 row.innerHTML = `<td>${mat.id}</td><td>${mat.name}</td><td>${mat.qty}</td><td>${mat.unit}</td><td>${badge}</td><td><button class="delete-btn" onclick="deleteMaterial(${index})">حذف</button></td>`;
             });
-            localStorage.setItem('materials', JSON.stringify(materials));
+            localStorage.setItem('materials_v2', JSON.stringify(materials));
         }
 
         function renderExpenses() {
@@ -236,7 +234,7 @@
                 let row = tbody.insertRow();
                 row.innerHTML = `<td>${exp.id}</td><td>${exp.date}</td><td>${exp.desc}</td><td>${exp.amount.toLocaleString()} ر.س</td><td>${exp.user}</td><td><button class="delete-btn" onclick="deleteExpense(${index})">حذف</button></td>`;
             });
-            localStorage.setItem('expenses', JSON.stringify(expenses));
+            localStorage.setItem('expenses_v2', JSON.stringify(expenses));
         }
 
         function addMaterial(e) {

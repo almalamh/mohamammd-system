@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إدارة العهد والمشتريات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        /* واجهة تسجيل الدخول */
         .login-container { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 450px; text-align: center; }
         .logo-title { color: #2a5298; font-size: 28px; font-weight: bold; margin-bottom: 5px; }
         .sub-title { color: #888; font-size: 16px; margin-bottom: 30px; }
@@ -17,14 +19,19 @@
         .form-group input:focus { border-color: #2a5298; }
         .login-btn { width: 100%; padding: 12px; background: #2a5298; border: none; border-radius: 10px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .login-btn:hover { background: #1e3c72; }
+
+        /* لوحة التحكم (مخفية في البداية) */
+        .dashboard-container { display: none; background: #f4f6f9; color: #333; width: 100%; max-width: 900px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .header { background: #2a5298; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .content-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .welcome-msg { font-size: 18px; color: #666; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="login-container" id="loginBox">
         <div class="logo-title">محمد إبراهيم</div>
         <div class="sub-title">بوابة الاسترداد</div>
-        
         <h2 style="margin-bottom: 20px; color: #333;">تسجيل الدخول</h2>
         
         <form onsubmit="handleLogin(event)">
@@ -40,8 +47,18 @@
         </form>
     </div>
 
+    <div class="dashboard-container" id="dashboardBox">
+        <div class="header">
+            <h1>نظام إدارة العهد والمشتريات</h1>
+            <p>مرحباً بك في لوحة التحكم الرئيسية</p>
+        </div>
+        <div class="content-box">
+            <div class="welcome-msg" id="welcomeUser">🎉 تم تسجيل دخولك بنجاح!</div>
+            <p>هنا ستظهر جداول العهد، والمواد الخام، والمصاريف لاحقاً بناءً على التصميم الخاص بك.</p>
+        </div>
+    </div>
+
     <script>
-        // مصفوفة المستخدمين المضافة يدوياً بالنظام
         const usersDatabase = [
             { username: "MM777", password: "2500588591", name: "محمد" },
             { username: "zaid.nabil", password: "123456", name: "زيد نبيل" },
@@ -49,19 +66,21 @@
             { username: "amjad", password: "123456", name: "أمجد" }
         ];
 
-        // دالة التحقق عند الضغط على زر "دخول"
         function handleLogin(event) {
             event.preventDefault();
             
             const usernameInput = document.getElementById('username').value.trim();
             const passwordInput = document.getElementById('password').value;
             
-            // البحث عن المستخدم داخل القائمة اليدوية
             const user = usersDatabase.find(u => u.username === usernameInput && u.password === passwordInput);
             
             if (user) {
                 alert("أهلاً بك يا " + user.name + "، تم تسجيل الدخول بنجاح!");
-                window.location.href = "dashboard.html"; 
+                
+                // إخفاء صندوق الدخول وإظهار لوحة التحكم في نفس الصفحة فوراً
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('dashboardBox').style.display = 'block';
+                document.getElementById('welcomeUser').innerText = "🎉 أهلاً بك يا " + user.name + "، تم تسجيل دخولك بنجاح إلى النظام اليدوي للعهد.";
             } else {
                 alert("عذراً، اسم المستخدم أو كلمة المرور غير صحيحة!");
             }

@@ -49,7 +49,7 @@
     <div class="header">
         <div>
             <h1>نظام إدارة العهد والمشتريات والطباعة</h1>
-            <p>مرحباً بك يا محمد | لوحة البيانات الحقيقية</p>
+            <p>مرحباً بك يا محمد | لوحة البيانات الخاصة بك</p>
         </div>
         <a href="./index.html" class="logout-btn">تسجيل الخروج</a>
     </div>
@@ -157,9 +157,10 @@
     </div>
 
     <script>
-        // حدد مبلغ عهدتك الحقيقي هنا (مثال: 50000)
+        // حدد مبلغ عهدتك الإجمالي هنا لتتغير الحسابات بناءً عليه
         const totalBudget = 50000;
 
+        // مصفوفات فارغة تماماً لاستقبال بياناتك
         let materials = JSON.parse(localStorage.getItem('materials')) || [];
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
@@ -212,7 +213,7 @@
             const name = document.getElementById('matName').value;
             const qty = parseInt(document.getElementById('matQty').value);
             const unit = document.getElementById('matUnit').value;
-            const nextId = "MAT-0" + (materials.length + 1);
+            const nextId = "MAT-" + String(materials.length + 1).padStart(2, '0');
 
             materials.push({ id: nextId, name: name, qty: qty, unit: unit });
             renderMaterials();

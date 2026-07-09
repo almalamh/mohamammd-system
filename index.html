@@ -57,8 +57,15 @@
             
             if (user) {
                 alert("أهلاً بك يا " + user.name + "، تم تسجيل الدخول بنجاح!");
-                // الانتقال باستخدام مسار نسبي آمن متوافق مع جيت هوب بايدجز
-                window.location.href = "./dashboard.html"; 
+                
+                // حل مشكلة احتواء الرابط على كلمة dashboard تلقائياً
+                if (window.location.href.includes("dashboard.html")) {
+                    // إذا كان الرابط يحتوي عليها بالفعل، نقوم فقط بإعادة تحديث الصفحة الحالية لتعرض اللوحة مباشرة
+                    window.location.reload();
+                } else {
+                    // إذا كان الرابط هو الرئيسي، ينتقل بشكل طبيعي
+                    window.location.href = "./dashboard.html";
+                }
             } else {
                 alert("عذراً، اسم المستخدم أو كلمة المرور غير صحيحة!");
             }

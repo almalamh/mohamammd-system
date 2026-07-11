@@ -296,7 +296,16 @@
                 expenses.splice(index, 1);
                 renderExpenses();
                 calculateStats();
-            }
+          // كود تحديث اسم المستخدم تلقائياً عند فتح اللوحة
+document.addEventListener("DOMContentLoaded", function() {
+    let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
+    
+    // البحث عن نص الترحيب وتحديثه باسم المستخدم الحالي
+    let headerText = document.querySelector('.header p');
+    if (headerText) {
+        headerText.innerText = `مرحباً بك يا ${currentUser} | لوحة البيانات الخاصة بك`;
+    }
+});  }
         }
     </script>
 </body>

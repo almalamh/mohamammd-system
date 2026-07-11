@@ -3,30 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - نظام العهد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>تسجيل الدخول - نظام إدارة العهد والمواد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .login-container { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 450px; text-align: center; }
-        .logo-title { color: #2a5298; font-size: 28px; font-weight: bold; margin-bottom: 5px; }
-        .sub-title { color: #888; font-size: 16px; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; text-align: right; }
-        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: bold; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; outline: none; font-size: 16px; transition: 0.3s; }
-        .form-group input:focus { border-color: #2a5298; }
-        .login-btn { width: 100%; padding: 12px; background: #2a5298; border: none; border-radius: 10px; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .login-btn:hover { background: #1e3c72; }
+        body { 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+        }
+        .login-container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-container h2 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .login-container p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            text-align: right;
+            transition: 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 5px rgba(42, 82, 152, 0.2);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2a5298;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            background: #1e3c72;
+        }
+        .error-msg {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
     <div class="login-container">
-        <div class="logo-title">محمد إبراهيم</div>
-        <div class="sub-title">بوابة الاسترداد</div>
-        <h2 style="margin-bottom: 20px; color: #333;">تسجيل الدخول</h2>
+        <h2>نظام إدارة العهد والمواد</h2>
+        <p>الرجاء إدخال بياناتك للدخول إلى لوحة التحكم</p>
         
-        <form onsubmit="handleLogin(event)">
+        <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>اسم المستخدم</label>
                 <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
@@ -35,39 +99,38 @@
                 <label>كلمة المرور</label>
                 <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
-            <button type="submit" class="login-btn">دخول</button>
+            
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+            <div id="errorBox" class="error-msg">❌ اسم المستخدم أو كلمة المرور غير صحيحة!</div>
         </form>
     </div>
 
     <script>
-        const usersDatabase = [
-            { username: "MM777", password: "2500588591", name: "محمد" },
-            { username: "zaid.nabil", password: "123456", name: "زيد نبيل" },
-            { username: "akram.mohammed", password: "123456", name: "أكرم محمد" },
-            { username: "amjad", password: "123456", name: "أمجد" }
-        ];
+        // قاعدة بيانات المستخدمين الافتراضية وصلاحياتهم
+        const usersDatabase = {
+            "mohammed": { password: "123456", displayName: "محمد إبراهيم" },
+            "zaid": { password: "123456", displayName: "زيد نبيل" },
+            "akram": { password: "123456", displayName: "أكرم محمد" },
+            "amjed": { password: "123456", displayName: "أمجد" }
+        };
 
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const usernameInput = document.getElementById('username').value.trim();
-            const passwordInput = document.getElementById('password').value;
-            
-            const user = usersDatabase.find(u => u.username === usernameInput && u.password === passwordInput);
-            
-            if (user) {
-                alert("أهلاً بك يا " + user.name + "، تم تسجيل الدخول بنجاح!");
+        function handleLogin(e) {
+            e.preventDefault();
+            const userInp = document.getElementById('username').value.trim().toLowerCase();
+            const passInp = document.getElementById('password').value;
+            const errorBox = document.getElementById('errorBox');
+
+            // التحقق من صحة البيانات
+            if (usersDatabase[userInp] && usersDatabase[userInp].password === passInp) {
+                errorBox.style.display = 'none';
                 
-                // حل مشكلة احتواء الرابط على كلمة dashboard تلقائياً
-                if (window.location.href.includes("dashboard.html")) {
-                    // إذا كان الرابط يحتوي عليها بالفعل، نقوم فقط بإعادة تحديث الصفحة الحالية لتعرض اللوحة مباشرة
-                    window.location.reload();
-                } else {
-                    // إذا كان الرابط هو الرئيسي، ينتقل بشكل طبيعي
-                    window.location.href = "./dashboard.html";
-                }
+                // حفظ اسم الشخص المسجل الحالي في الذاكرة لتخصيص لوحة التحكم له
+                localStorage.setItem('current_logged_user', usersDatabase[userInp].displayName);
+                
+                // التوجه مباشرة إلى لوحة التحكم
+                window.location.href = "./dashboard.html";
             } else {
-                alert("عذراً، اسم المستخدم أو كلمة المرور غير صحيحة!");
+                errorBox.style.display = 'block';
             }
         }
     </script>

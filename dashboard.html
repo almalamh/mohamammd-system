@@ -14,7 +14,6 @@
         .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; text-decoration: none; transition: 0.3s; font-size: 14px; }
         .logout-btn:hover { background: #c0392b; }
 
-        /* ستايل بار تحديث العهدة الجديد متوافق مع تصميمك */
         .budget-setter { background: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .budget-setter label { font-weight: bold; color: #2a5298; font-size: 15px; }
         .budget-setter input { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; width: 220px; }
@@ -58,12 +57,12 @@
     <div class="header">
         <div>
             <h1>نظام إدارة العهد والمشتريات والطباعة</h1>
-            <p>مرحباً بك يا محمد | لوحة البيانات الخاصة بك</p>
+            <p>مرحباً بك | لوحة البيانات الخاصة بك</p>
         </div>
         <a href="./index.html" class="logout-btn">تسجيل الخروج</a>
     </div>
 
-    <div class="budget-setter">
+    <div class="budget-setter admin-only">
         <label>💰 إدخال / تحديث قيمة العهدة الحالية:</label>
         <input type="number" id="customBudgetInput" placeholder="أدخل مبلغ العهدة الجديد هنا">
         <button onclick="updateBudget()">تحديث العهدة</button>
@@ -71,7 +70,7 @@
     </div>
 
     <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card admin-only">
             <div class="stat-title">إجمالي العهدة المستلمة</div>
             <div id="totalBudgetCard" class="stat-value">0 ر.س</div>
         </div>
@@ -83,7 +82,7 @@
             <div class="stat-title">عدد المواد الخام المسجلة</div>
             <div id="totalMaterialsCard" class="stat-value">0 مواد</div>
         </div>
-        <div class="stat-card" style="border-right-color: #9b59b6;">
+        <div class="stat-card admin-only" style="border-right-color: #9b59b6;">
             <div class="stat-title">المتبقي في العهدة</div>
             <div id="remainingBudgetCard" class="stat-value">0 ر.س</div>
         </div>
@@ -145,7 +144,7 @@
                         <th>الكمية المتوفرة</th>
                         <th>وحدة القياس</th>
                         <th>حالة المخزون</th>
-                        <th>إجراء</th>
+                        <th class="admin-only">إجراء</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -164,7 +163,7 @@
                         <th>البيان / الوصف</th>
                         <th>المبلغ شامل الضريبة</th>
                         <th>الشخص المسؤول</th>
-                        <th>إجراء</th>
+                        <th class="admin-only">إجراء</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -173,12 +172,10 @@
     </div>
 
     <script>
-        // استخدام معرفات تخزين معزولة كلياً لكسر النسخ القديمة المعلقة بالمتصفح
         const STORAGE_BUDGET = 'mohammed_system_budget_v5';
         const STORAGE_MATERIALS = 'mohammed_system_materials_v5';
         const STORAGE_EXPENSES = 'mohammed_system_expenses_v5';
 
-        // تعيين القيمة الافتراضية الصفرية في حال لم يتم الإدخال مسبقاً
         let totalBudget = parseFloat(localStorage.getItem(STORAGE_BUDGET)) || 0;
         let materials = JSON.parse(localStorage.getItem(STORAGE_MATERIALS)) || [];
         let expenses = JSON.parse(localStorage.getItem(STORAGE_EXPENSES)) || [];
@@ -235,13 +232,23 @@
         function renderMaterials() {
             const tbody = document.getElementById('materialsTable').getElementsByTagName('tbody')[0];
             tbody.innerHTML = "";
+            
+            // قراءة الموظف الحالي لمعرفة هل يحق له رؤية زر الحذف
+            let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
+            let showDelete = (currentUser === "محمد إبراهيم") ? "" : "admin-only";
+
             materials.forEach((mat, index) => {
                 let badge = '<span class="badge success">متوفر بكثرة</span>';
                 if(mat.qty == 0) badge = '<span class="badge danger">نفذت الكمية</span>';
                 else if(mat.qty < 10) badge = '<span class="badge warning">مخزون منخفض</span>';
 
                 let row = tbody.insertRow();
-                row.innerHTML = `<td>${mat.id}</td><td>${mat.name}</td><td>${mat.qty}</td><td>${mat.unit}</td><td>${badge}</td><td><button class="delete-btn" onclick="deleteMaterial(${index})">حذف</button></td>`;
+                row.innerHTML = `<td>${mat.id}</td>
+                                 <td>${mat.name}</td>
+                                 <td>${mat.qty}</td>
+                                 <td>${mat.unit}</td>
+                                 <td>${badge}</td>
+                                 <td class="${showDelete}"><button class="delete-btn" onclick="deleteMaterial(${index})">حذف</button></td>`;
             });
             localStorage.setItem(STORAGE_MATERIALS, JSON.stringify(materials));
         }
@@ -249,9 +256,19 @@
         function renderExpenses() {
             const tbody = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
             tbody.innerHTML = "";
+            
+            // قراءة الموظف الحالي لمعرفة هل يحق له رؤية زر الحذف
+            let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
+            let showDelete = (currentUser === "محمد إبراهيم") ? "" : "admin-only";
+
             expenses.forEach((exp, index) => {
                 let row = tbody.insertRow();
-                row.innerHTML = `<td>${exp.id}</td><td>${exp.date}</td><td>${exp.desc}</td><td>${exp.amount.toLocaleString('en-US')} ر.س</td><td>${exp.user}</td><td><button class="delete-btn" onclick="deleteExpense(${index})">حذف</button></td>`;
+                row.innerHTML = `<td>${exp.id}</td>
+                                 <td>${exp.date}</td>
+                                 <td>${exp.desc}</td>
+                                 <td>${exp.amount.toLocaleString('en-US')} ر.س</td>
+                                 <td>${exp.user}</td>
+                                 <td class="${showDelete}"><button class="delete-btn" onclick="deleteExpense(${index})">حذف</button></td>`;
             });
             localStorage.setItem(STORAGE_EXPENSES, JSON.stringify(expenses));
         }
@@ -292,41 +309,33 @@
         }
 
         function deleteExpense(index) {
-            if(confirm("هل أنت متأكد من حذف هذا المصروف؟")) {
+            if(confirm("هل أنت متأكد من حذف هذا المصروف Momammed؟")) {
                 expenses.splice(index, 1);
                 renderExpenses();
                 calculateStats();
-          // كود تحديث اسم المستخدم تلقائياً عند فتح اللوحة
-document.addEventListener("DOMContentLoaded", function() {
-    let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
-    
-    // البحث عن نص الترحيب وتحديثه باسم المستخدم الحالي
-    let headerText = document.querySelector('.header p');
-    if (headerText) {
-        headerText.innerText = `مرحباً بك يا ${currentUser} | لوحة البيانات الخاصة بك`;
-    }document.addEventListener("DOMContentLoaded", function() {
-    // 1. قراءة اسم المستخدم الحالي
-    let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
-    
-    // 2. تحديث نص الترحيب في الهيدر تلقائياً
-    let headerText = document.querySelector('.header p');
-    if (headerText) {
-        headerText.innerText = `مرحباً بك يا ${currentUser} | لوحة البيانات الخاصة بك`;
-    }
-
-    // 3. نظام الصلاحيات والأمان: إذا لم يكن المستخدم هو (محمد إبراهيم)، يتم إخفاء البيانات الحساسة
-    if (currentUser !== "محمد إبراهيم") {
-        let style = document.createElement('style');
-        style.innerHTML = `
-            .admin-only { 
-                display: none !important; 
             }
-        `;
-        document.head.appendChild(style);
-    }
-});
-});  }
         }
+
+        // دالة الصلاحيات والترحيب عند تحميل الصفحة بشكل صحيح ومستقل
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
+            
+            let headerText = document.querySelector('.header p');
+            if (headerText) {
+                headerText.innerText = `مرحباً بك يا ${currentUser} | لوحة البيانات الخاصة بك`;
+            }
+
+            // تفعيل نظام الأمان الخفي للمدير فقط
+            if (currentUser !== "محمد إبراهيم") {
+                let style = document.createElement('style');
+                style.innerHTML = `
+                    .admin-only { 
+                        display: none !important; 
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        });
     </script>
 </body>
 </html>

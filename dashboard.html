@@ -304,7 +304,27 @@ document.addEventListener("DOMContentLoaded", function() {
     let headerText = document.querySelector('.header p');
     if (headerText) {
         headerText.innerText = `مرحباً بك يا ${currentUser} | لوحة البيانات الخاصة بك`;
+    }document.addEventListener("DOMContentLoaded", function() {
+    // 1. قراءة اسم المستخدم الحالي
+    let currentUser = localStorage.getItem('current_logged_user') || 'محمد';
+    
+    // 2. تحديث نص الترحيب في الهيدر تلقائياً
+    let headerText = document.querySelector('.header p');
+    if (headerText) {
+        headerText.innerText = `مرحباً بك يا ${currentUser} | لوحة البيانات الخاصة بك`;
     }
+
+    // 3. نظام الصلاحيات والأمان: إذا لم يكن المستخدم هو (محمد إبراهيم)، يتم إخفاء البيانات الحساسة
+    if (currentUser !== "محمد إبراهيم") {
+        let style = document.createElement('style');
+        style.innerHTML = `
+            .admin-only { 
+                display: none !important; 
+            }
+        `;
+        document.head.appendChild(style);
+    }
+});
 });  }
         }
     </script>
